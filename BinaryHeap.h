@@ -17,6 +17,10 @@ public:
     void maxHeapify(int, int);
     void BuildMaxHeap(vector<T> a);
     void BuildMinHeap(vector<T> a);
+    T deleteMinNode();
+    T deleteMaxNode();
+    T* returnHeap();
+    double findAverage();
     void printHeap();
     ~BinaryHeap();
 };
@@ -26,7 +30,7 @@ template<class T>
 BinaryHeap<T>::BinaryHeap(int s)
 {
 	size = s;
-	array = new int[size];
+	array = new T[size];
 }
 
 template<class T>
@@ -94,6 +98,70 @@ void BinaryHeap<T>::BuildMinHeap(vector<T> a)
     for (int i = size/2; i >= 1; i--) // Start from the last non-leaf node
         minHeapify(i, size);
 }
+
+template<class T>
+ T BinaryHeap<T>::deleteMinNode()
+{
+     if (size == 0) {
+         cout << "Heap is empty. No node to delete." << endl;
+         return T(); // Default constructor will be called for type T
+     }
+
+     // Store the minimum node before removal
+     T minNode = array[1];
+
+     // Replace the root (minimum) with the last element
+     array[1] = array[size];
+     size--;
+
+     // Restore heap property by heapifying down
+     minHeapify(1, size);
+
+     // Return the deleted minimum node
+     return minNode;
+ }
+
+
+ template<class T>
+ T BinaryHeap<T>::deleteMaxNode()
+ {
+     if (size == 0) {
+         cout << "Heap is empty. No node to delete." << endl;
+         return T(); // Default constructor will be called for type T
+     }
+
+     // Store the maximum node before removal
+     T maxNode = array[1];
+
+     // Replace the root (maximum) with the last element
+     array[1] = array[size];
+     size--;
+
+     // Restore heap property by heapifying down
+     maxHeapify(1, size);
+
+     // Return the deleted maximum node
+     return maxNode;
+ }
+
+ template<class T>
+ inline T* BinaryHeap<T>::returnHeap()
+ {
+     return array;
+ }
+
+ template<class T>
+ double BinaryHeap<T>::findAverage()
+ {
+     int sum = 0; int count = 0;
+     for (auto i : array)
+     {
+         sum = sum + i;
+         count++;
+     }
+     return sum/count;
+ }
+
 
 template<class T>
 void BinaryHeap<T>::printHeap()
