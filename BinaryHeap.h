@@ -20,7 +20,6 @@ public:
     T deleteMinNode();
     T deleteMaxNode();
     T* returnHeap();
-    double findAverage();
     void printHeap();
     ~BinaryHeap();
 };
@@ -145,21 +144,9 @@ template<class T>
  }
 
  template<class T>
- inline T* BinaryHeap<T>::returnHeap()
+  T* BinaryHeap<T>::returnHeap()
  {
      return array;
- }
-
- template<class T>
- double BinaryHeap<T>::findAverage()
- {
-     int sum = 0; int count = 0;
-     for (auto i : array)
-     {
-         sum = sum + i;
-         count++;
-     }
-     return sum/count;
  }
 
 

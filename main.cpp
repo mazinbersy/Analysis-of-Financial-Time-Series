@@ -13,20 +13,20 @@ struct exchangeInfo
 
     // Overload < operator
     friend bool operator<(const exchangeInfo& a, const exchangeInfo& b) {
-        return a.date < b.date;
+        return a.value < b.value;
     }
 
     // Overload > operator
     friend bool operator>(const exchangeInfo& a, const exchangeInfo& b) {
-        return a.date > b.date;
+        return a.value > b.value;
     }
 };
 
-vector<exchangeInfo> readInfo(string x)
+vector<exchangeInfo> readInfo_and_findAverage(string x, double & avg)
 {
     vector<exchangeInfo> dataVector;
     ifstream file(x);
-
+    double sum = 0; int count = 0;
     if (!file.is_open()) {
         cout << "Failed to open file: " << x << endl;
         return dataVector;
@@ -45,44 +45,85 @@ vector<exchangeInfo> readInfo(string x)
 
         // Add parsed data to vector
         dataVector.push_back(newData);
+        count++;
+        sum = sum + newData.value;
     }
-
+    avg = sum / count;
     file.close();
     return dataVector;
 }
 
-void findMaxValues(int n, BinaryHeap<exchangeInfo>& heap)
+void findMaxValues(int n, BinaryHeap<exchangeInfo>& heap, double avg)
 {
     cout << "MAX VALUES:" << endl;
-
-    for (int i = 0; i < n; i++)
+    for (int i = 1; i <= n; i++)
     {
-        exchangeInfo temp = heap.deleteMaxNode();
-        cout<<"Date: "<<temp.date << "     " << "Value: "<<temp.value << endl;
+        cout << "Date: " << heap.returnHeap()[i].date << "     " << "Value: " << heap.returnHeap()[i].value << "    " << "Change from Mean: " << (heap.returnHeap()[i].value - avg) <<endl;
     }
 }
 
-void findMinValues(int n, BinaryHeap<exchangeInfo>& heap)
+void findMinValues(int n, BinaryHeap<exchangeInfo>& heap, double avg)
 {
     cout << "MIN VALUES:" << endl;
-    for (int i = 0; i < n; i++)
+    for (int i = 1; i <= n; i++)
     {
-        cout << "Date: " << << "     " << "Value: " << temp.value << endl;
+        cout << "Date: " << heap.returnHeap()[i].date << "     " << "Value: " << heap.returnHeap()[i].value << "    " << "Change from Mean: " << (heap.returnHeap()[i].value - avg )<< endl;
     }
+}
+
+void maxSubsequence(int &start, int &end, vector<exchangeInfo> data, double avg)
+{
+    start = 0;
+    end = 0;
+    int temp = 0;
+    double currentSum = 0; double maxSum = 0;
+    for (int i=0; i<data.size() ; i++)
+    {
+        currentSum += data[i].value - avg;
+        if (currentSum > maxSum)
+        {
+            maxSum = currentSum;
+            start = temp;
+            end = i;
+        }
+        if (currentSum < 0)
+        {
+            currentSum = 0;
+            temp = i + 1;
+        }
+    }
+
 }
 
 int main()
 {
-    vector<exchangeInfo> dataVector = readInfo("exchangeInfo.txt");
-	BinaryHeap<exchangeInfo> heap(dataVector.size()+1);
-    heap.BuildMaxHeap(dataVector);
-    heap.BuildMinHeap(dataVector);
+    double avg;
+    vector<exchangeInfo> dataVector = readInfo_and_findAverage("exchangeInfo.txt", avg);
+    cout <<"Mean Exchange Rate: "<< avg<<endl;     cout << endl << endl;
 
+	BinaryHeap<exchangeInfo> Maxheap(dataVector.size()+1);
+    BinaryHeap<exchangeInfo> Minheap(dataVector.size() + 1);
+    
+    int n;
+    cout << "Enter Number of Max and Min values requested: ";
+    cin >> n;
+    
+    Maxheap.BuildMaxHeap(dataVector);
+    findMaxValues(n, Maxheap, avg);
+    cout << endl << endl;
 
-    findMaxValues(10, heap);
-    findMinValues(10, heap);
+    Minheap.BuildMinHeap(dataVector);
+    findMinValues(n, Minheap, avg);
+    cout << endl << endl;
+    int start, end;
+    maxSubsequence(start, end, dataVector, avg);
+    
+    cout << "Maximum Subsequence Sum:" << endl;
+    for (int i = start; i <= end; i++)
+    {
+        cout << "Date: " << dataVector[i].date << "     " << "Value: " << dataVector[i].value << "    " << "Change from Mean: " << (dataVector[i].value - avg) << endl;
 
-
+    }
     
    
 
