@@ -53,6 +53,7 @@ vector<exchangeInfo> readInfo_and_findAverage(string x, double & avg)
     return dataVector;
 }
 
+//Find and Display N Maximum exchange rate values
 void findMaxValues(int n, BinaryHeap<exchangeInfo>& heap, double avg)
 {
     cout << "MAX VALUES:" << endl;
@@ -62,6 +63,7 @@ void findMaxValues(int n, BinaryHeap<exchangeInfo>& heap, double avg)
     }
 }
 
+//Find and Display N Minumum exchange rate values
 void findMinValues(int n, BinaryHeap<exchangeInfo>& heap, double avg)
 {
     cout << "MIN VALUES:" << endl;
@@ -71,6 +73,7 @@ void findMinValues(int n, BinaryHeap<exchangeInfo>& heap, double avg)
     }
 }
 
+//Find Start and End Indices for of the contiguous period over which the sum of rate changes is maximum
 void maxSubsequence(int &start, int &end, vector<exchangeInfo> data, double avg)
 {
     start = 0;
@@ -118,12 +121,8 @@ int main()
     int start, end;
     maxSubsequence(start, end, dataVector, avg);
     
-    cout << "Maximum Subsequence Sum:" << endl;
-    for (int i = start; i <= end; i++)
-    {
-        cout << "Date: " << dataVector[i].date << "     " << "Value: " << dataVector[i].value << "    " << "Change from Mean: " << (dataVector[i].value - avg) << endl;
-
-    }
+    cout << "Maximum Subsequence Sum--> Start Date: " << dataVector[start].date << "        End Date: " << dataVector[end].date << endl;;
+    
     
    
 
