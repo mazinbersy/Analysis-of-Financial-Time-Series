@@ -100,8 +100,14 @@ void maxSubsequence(int &start, int &end, vector<exchangeInfo> data, double avg)
 
 int main()
 {
-    double avg;
-    vector<exchangeInfo> dataVector = readInfo_and_findAverage("exchangeInfo.txt", avg);
+    double avg; string file;
+
+    cout << "Enter 0 for default Exchange Rate Information or Enter File Path to New Information: ";
+    cin >> file;
+
+    file = (file == "0") ? "exchangeInfo.txt" : file;
+    vector<exchangeInfo> dataVector = readInfo_and_findAverage(file, avg);
+    cout << endl << endl;
     cout <<"Mean Exchange Rate: "<< avg<<endl;     cout << endl << endl;
 
 	BinaryHeap<exchangeInfo> Maxheap(dataVector.size()+1);
